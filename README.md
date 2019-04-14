@@ -4,9 +4,10 @@
 
 ## Quick start
 
+0. Install with `npm i ejs-render-remote`
 1. Include this script
    ```html
-   <script src="node_modulse/ejs-render-remote/ejs-render-remote.js"></script>
+   <script src="node_modules/ejs-render-remote/ejs-render-remote.js"></script>
    ```
 2. Creare a file with your template, for example `templates/hello-world.ejs` containing `hello <%= name %>!`
 3. Render the remote template:
