@@ -33,14 +33,14 @@
 
 			var r = uuidv4();
 			getTemplateFn.then(function(template) {
-				document.getElementById(r).outerHTML = ejs.render(
+				$('#' + r).replaceWith(ejs.render(
 					template,
 					data,
 					{
 						cache: true,
 						filename: templateUrl
 					}
-				);
+				));
 			});
 
 			return '<span class="ejs-templateplaceholder" style="display: none;" id="' + r + '"></span>';
@@ -57,10 +57,10 @@
 			$.get(templateUrl)
 			.then(function(template) {
 				var templateFn = ejs.compile(template,
-				{
-					cache: true,
-					filename: templateUrl
-				});
+					{
+						cache: true,
+						filename: templateUrl
+					});
 
 				ejs.cache.set(templateUrl, templateFn);
 
@@ -69,5 +69,5 @@
 		}
 
 		return d;
-	}
+	};
 })(jQuery);
