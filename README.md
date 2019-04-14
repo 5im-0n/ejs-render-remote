@@ -2,6 +2,10 @@
 
 [ejs](https://ejs.co/) remote client side includes.
 
+```js
+html = ejs.rr('sayhello.ejs', {name: 'Simon'});
+```
+
 ## Quick start
 
 0. Install with `npm i ejs-render-remote`
