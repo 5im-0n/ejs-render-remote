@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>ejs-render-remote example</title>
+</head>
+<body>
+	<h1>ejs-render-remote example</h1>
+	<p class="hello"></p>
+
+	<script src="jquery.min.js"></script>
+	<script src="ejs.min.js"></script>
+	<script src="../ejs-render-remote.js"></script>
+
+
+	<script>
+		//render the template
+		$('.hello').html(ejs.rr('templates/hello.ejs', {name: 'Simon'}));
+	</script>
+</body>
+</html>
