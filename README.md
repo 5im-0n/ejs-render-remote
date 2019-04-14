@@ -9,7 +9,7 @@
    ```html
    <script src="node_modules/ejs-render-remote/ejs-render-remote.js"></script>
    ```
-2. Creare a file with your template, for example `templates/hello-world.ejs` containing `hello <%= name %>!`
+2. Create a file with your template, for example `templates/hello-world.ejs` containing `hello <%= name %>!`
 3. Render the remote template:
    ```js
    someDomelement.outerHTML = ejs.rr('templates/hello-world.ejs', {name: 'Simon'});
@@ -28,5 +28,5 @@ The resulting ejs template function is cached, so the second time this function 
 
 ### ejs.preloadTemplate(templateUrl)
 
-Since `ejs.rr` is async, you can call `ejs.preloadTemplate` before invoking `ejs.rr` to warm the template chace up for that `templateUrl`.  
+Since `ejs.rr` is async, you can call `ejs.preloadTemplate` before invoking `ejs.rr` to warm the template cache up for that `templateUrl`.  
 By doing so the call to `ejs.rr` will return the rendered template string right away.
