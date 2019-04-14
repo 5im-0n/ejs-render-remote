@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "homepage": "https://github.com/S2-/ejs-render-remote",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "s2 <s2@31337.it>",
+  "license": "ISC",
+  "keywords": ["ejs", "templating", "client-side"]
 }
