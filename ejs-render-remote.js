@@ -64,7 +64,7 @@
 
 				ejs.cache.set(templateUrl, templateFn);
 
-				d.resolve();
+				d.resolve(templateUrl);
 			});
 		}
 
