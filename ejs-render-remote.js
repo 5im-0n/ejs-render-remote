@@ -1,4 +1,4 @@
-//this uses jQuery for now because ie11 support is needed (promises and fetch)
+//this uses jQuery for now because ie11 support is needed (promises, fetch, Object.assign)
 
 (function($) {
 	var uuidv4 = function() {
@@ -16,11 +16,8 @@
 		};
 
 		var templateOptions = options || {};
-		for (var attrname in cacheOptions) {
-			templateOptions[attrname] = cacheOptions[attrname];
-		}
 
-		return templateOptions;
+		return $.extend(templateOptions, cacheOptions);
 	};
 
 	ejs.rr = function(templateUrl, data, options) {
