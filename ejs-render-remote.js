@@ -9,7 +9,21 @@
 		});
 	};
 
-	ejs.rr = function(templateUrl, data) {
+	var overwriteWithCacheOptions = function(options, cacheName) {
+		var cacheOptions = {
+			cache: true,
+			filename: cacheName
+		};
+
+		var templateOptions = options || {};
+		for (var attrname in cacheOptions) {
+			templateOptions[attrname] = cacheOptions[attrname];
+		}
+
+		return templateOptions;
+	};
+
+	ejs.rr = function(templateUrl, data, options) {
 		var templateFn = ejs.cache.get(templateUrl);
 
 		//if the template is already cached, return it and we are done
@@ -27,13 +41,12 @@
 
 			var r = uuidv4();
 			getTemplateFn.then(function(template) {
+				var templateOptions = overwriteWithCacheOptions(options, templateUrl);
+
 				$('#' + r).replaceWith(ejs.render(
 					template,
 					data,
-					{
-						cache: true,
-						filename: templateUrl
-					}
+					templateOptions
 				));
 
 				//clean up the getFnFor
@@ -46,7 +59,7 @@
 		}
 	};
 
-	ejs.preloadTemplate = function(templateUrl) {
+	ejs.preloadTemplate = function(templateUrl, options) {
 		var d = $.Deferred();
 
 		//if the template is already cached, just return.
@@ -55,12 +68,8 @@
 		} else {
 			$.get(templateUrl)
 			.then(function(template) {
-				var templateFn = ejs.compile(template,
-					{
-						cache: true,
-						filename: templateUrl
-					});
-
+				var templateOptions = overwriteWithCacheOptions(options, templateUrl);
+				var templateFn = ejs.compile(template, templateOptions);
 				ejs.cache.set(templateUrl, templateFn);
 
 				d.resolve(templateUrl);
