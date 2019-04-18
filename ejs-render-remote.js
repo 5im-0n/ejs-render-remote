@@ -14,12 +14,6 @@
 
 		//if the template is already cached, return it and we are done
 		if (templateFn) {
-			//but first check if there is still a getter function for this template in the cache
-			//if yes, remove it so we clean up a bit
-			if (ejs.cache.remove && ejs.cache.get('getFnFor' + templateUrl)) {
-				ejs.cache.remove('getFnFor' + templateUrl);
-			}
-
 			return templateFn(data);
 
 		} else { //if the template is not cached, we need to get it and render it later once we have it. remember: this happens only if the template is not already cached
@@ -41,6 +35,11 @@
 						filename: templateUrl
 					}
 				));
+
+				//clean up the getFnFor
+				if (ejs.cache.remove && ejs.cache.get('getFnFor' + templateUrl)) {
+					ejs.cache.remove('getFnFor' + templateUrl);
+				}
 			});
 
 			return '<span class="ejs-templateplaceholder" style="display: none;" id="' + r + '"></span>';
