@@ -61,7 +61,7 @@
 
 		//if the template is already cached, just return.
 		if (ejs.cache.get(templateUrl)) {
-			d.resolve();
+			d.resolve(templateUrl);
 		} else {
 			$.get(templateUrl)
 			.then(function(template) {
