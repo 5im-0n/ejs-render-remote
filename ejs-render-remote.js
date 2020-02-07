@@ -66,7 +66,13 @@
 			$.get(templateUrl)
 			.then(function(template) {
 				var templateOptions = overwriteWithCacheOptions(options, templateUrl);
-				var templateFn = ejs.compile(template, templateOptions);
+				try {
+					var templateFn = ejs.compile(template, templateOptions);
+				} catch(ex) {
+					console.error(templateUrl, ex);
+					d.reject(ex);
+					throw ex;
+				}
 				ejs.cache.set(templateUrl, templateFn);
 
 				d.resolve(templateUrl);
