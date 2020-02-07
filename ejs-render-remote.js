@@ -40,11 +40,15 @@
 			getTemplateFn.then(function(template) {
 				var templateOptions = overwriteWithCacheOptions(options, templateUrl);
 
-				$('#' + r).replaceWith(ejs.render(
-					template,
-					data,
-					templateOptions
-				));
+				try {
+					$('#' + r).replaceWith(ejs.render(
+						template,
+						data,
+						templateOptions
+					));
+				} catch(ex) {
+					console.error(templateUrl, ex);
+				}
 
 				//clean up the getFnFor
 				if (ejs.cache.remove && ejs.cache.get('getFnFor' + templateUrl)) {
