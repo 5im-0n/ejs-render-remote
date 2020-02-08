@@ -41,7 +41,7 @@
 			}
 
 			var r = uuidv4();
-			getTemplateFn.then(function(template) {
+			getTemplateFn.done(function(template) {
 				var templateOptions = overwriteWithCacheOptions(options, templateUrl);
 
 				try {
@@ -72,7 +72,7 @@
 			d.resolve(templateUrl);
 		} else {
 			$.get(templateUrl)
-			.then(function(template) {
+			.done(function(template) {
 				try {
 					var templateOptions = overwriteWithCacheOptions(options, templateUrl);
 					var templateFn = ejs.compile(template, templateOptions);
