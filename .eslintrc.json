@@ -28,6 +28,7 @@
 		"dot-notation": 0,
 		"no-multi-str": 2,
 		"key-spacing": [2, {"afterColon": true}],
-		"func-call-spacing": [2, "never"]
+		"func-call-spacing": [2, "never"],
+		"no-console": "warn"
 	}
 }
