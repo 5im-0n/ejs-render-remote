@@ -9,6 +9,7 @@
 <body>
 	<h1>ejs-render-remote example</h1>
 	<p class="hello"></p>
+	<div class="sometext"></div>
 
 	<script src="jquery.min.js"></script>
 	<script src="ejs.min.js"></script>
@@ -18,6 +19,14 @@
 	<script>
 		//render the template
 		$('.hello').html(ejs.rr('templates/hello.ejs', {name: 'Simon'}));
+
+		//a more elaborate example: preload the template to be sure the dom is
+		//ready when manipulated
+		ejs.preloadTemplate('templates/somestuff.ejs')
+		.then(function(t) {
+			$('.sometext').html(ejs.rr(t)); //this is sync now
+			$('.stuff').html('hi!');
+		});
 	</script>
 </body>
 </html>
