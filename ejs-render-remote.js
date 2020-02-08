@@ -28,8 +28,7 @@
 			try {
 				return templateFn(data);
 			} catch(ex) {
-				console.error(ex);
-				throw ex;
+				$.readyException(ex);
 			}
 
 		} else { //if the template is not cached, we need to get it and render it later once we have it. remember: this happens only if the template is not already cached
@@ -52,7 +51,7 @@
 						templateOptions
 					));
 				} catch(ex) {
-					console.error(templateUrl, ex);
+					$.readyException(ex);
 				}
 
 				//clean up the getFnFor
@@ -80,9 +79,8 @@
 					ejs.cache.set(templateUrl, templateFn);
 					d.resolve(templateUrl);
 				} catch(ex) {
-					console.error(templateUrl, ex);
+					$.readyException(ex);
 					d.reject(ex);
-					throw ex;
 				}
 			});
 		}
