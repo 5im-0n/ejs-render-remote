@@ -25,11 +25,7 @@
 
 		//if the template is already cached, return it and we are done
 		if (templateFn) {
-			try {
-				return templateFn(data);
-			} catch(ex) {
-				$.readyException(ex);
-			}
+			return templateFn(data);
 
 		} else { //if the template is not cached, we need to get it and render it later once we have it. remember: this happens only if the template is not already cached
 
