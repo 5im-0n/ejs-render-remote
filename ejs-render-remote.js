@@ -1,6 +1,4 @@
-//this uses jQuery for now because ie11 support is needed (promises, fetch, Object.assign)
-
-(function($) {
+(function() {
 	var uuidv4 = function() {
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
 			var r = Math.random() * 16 | 0;
@@ -17,7 +15,7 @@
 
 		var templateOptions = options || {};
 
-		return $.extend(templateOptions, cacheOptions);
+		return Object.assign(templateOptions, cacheOptions);
 	};
 
 	ejs.rr = function(templateUrl, data, options) {
@@ -30,30 +28,41 @@
 		} else { //if the template is not cached, we need to get it and render it later once we have it. remember: this happens only if the template is not already cached
 
 			//is there a getFn for this template?
-			var getTemplateFn = ejs.cache.get('getFnFor' + templateUrl);
-			if (!getTemplateFn) {
-				getTemplateFn = $.get(templateUrl);
-				ejs.cache.set('getFnFor' + templateUrl, getTemplateFn);
+			var getTemplatePromise = ejs.cache.get('getFnFor' + templateUrl);
+			if (!getTemplatePromise) {
+				getTemplatePromise = fetch(templateUrl).then(response => {
+					if (!response.ok) {
+						throw new Error('Failed to fetch template: ' + response.statusText);
+					}
+					return response.text();
+				});
+				ejs.cache.set('getFnFor' + templateUrl, getTemplatePromise);
 			}
 
 			var r = uuidv4();
-			getTemplateFn.done(function(template) {
+			getTemplatePromise.then(function(template) {
 				var templateOptions = overwriteWithCacheOptions(options, templateUrl);
 
 				try {
-					$('#' + r).replaceWith(ejs.render(
-						template,
-						data,
-						templateOptions
-					));
+					var element = document.getElementById(r);
+					if (element) {
+						element.outerHTML = ejs.render(
+							template,
+							data,
+							templateOptions
+						);
+					}
 				} catch(ex) {
-					$.readyException(ex);
+					console.error(ex);
+					throw ex;
 				}
 
 				//clean up the getFnFor
 				if (ejs.cache.remove && ejs.cache.get('getFnFor' + templateUrl)) {
 					ejs.cache.remove('getFnFor' + templateUrl);
 				}
+			}).catch(function(ex) {
+				console.error('Error loading template:', ex);
 			});
 
 			return '<span class="ejs-templateplaceholder" style="display: none;" id="' + r + '"></span>';
@@ -61,26 +70,31 @@
 	};
 
 	ejs.preloadTemplate = function(templateUrl, options) {
-		var d = $.Deferred();
-
-		//if the template is already cached, just return.
-		if (ejs.cache.get(templateUrl)) {
-			d.resolve(templateUrl);
-		} else {
-			$.get(templateUrl)
-			.done(function(template) {
-				try {
-					var templateOptions = overwriteWithCacheOptions(options, templateUrl);
-					var templateFn = ejs.compile(template, templateOptions);
-					ejs.cache.set(templateUrl, templateFn);
-					d.resolve(templateUrl);
-				} catch(ex) {
-					$.readyException(ex);
-					d.reject(ex);
-				}
-			});
-		}
-
-		return d;
+		return new Promise(function(resolve, reject) {
+			//if the template is already cached, just return.
+			if (ejs.cache.get(templateUrl)) {
+				resolve(templateUrl);
+			} else {
+				fetch(templateUrl)
+				.then(function(response) {
+					if (!response.ok) {
+						throw new Error('Failed to fetch template: ' + response.statusText);
+					}
+					return response.text();
+				})
+				.then(function(template) {
+					try {
+						var templateOptions = overwriteWithCacheOptions(options, templateUrl);
+						var templateFn = ejs.compile(template, templateOptions);
+						ejs.cache.set(templateUrl, templateFn);
+						resolve(templateUrl);
+					} catch(ex) {
+						console.error(ex);
+						reject(ex);
+					}
+				})
+				.catch(reject);
+			}
+		});
 	};
-})(jQuery);
+})();

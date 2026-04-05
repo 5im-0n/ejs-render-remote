@@ -27,7 +27,7 @@ See `examples` folder.
 
 ### ejs.rr(templateUrl, data)
 
-`ejs.rr` (render remote) renders the remote template. It makes an ajax call to fetch the template and then `ejs.render`s it.  
+`ejs.rr` (render remote) renders the remote template. It fetches the template and then `ejs.render`s it.  
 The resulting ejs template function is cached, so the second time this function is invoked for that same template, `ejs.rr` returns the rendered template synchronously.
 
 ### ejs.preloadTemplate(templateUrl)
